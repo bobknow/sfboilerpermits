@@ -1,24 +1,11 @@
 import LeadsDashboard from "@/components/admin/LeadsDashboard";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import type { Lead } from "@/types/lead";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-type Lead = {
-  id: number;
-  created_at: string;
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  boilers: number | null;
-  request_type: string | null;
-  message: string | null;
-  status: string;
-};
-
 export default async function AdminPage() {
-  // Keep customer information off the live site until authentication is added.
   if (process.env.NODE_ENV === "production") {
     notFound();
   }
