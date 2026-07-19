@@ -1,4 +1,60 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+
+type FormStatus = "idle" | "submitting" | "success" | "error";
+
 export default function ContactForm() {
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    setStatus("submitting");
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          email: formData.get("email"),
+          address: formData.get("address"),
+          boilers: formData.get("boilers"),
+          requestType: formData.get("requestType"),
+          message: formData.get("message"),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "The request could not be submitted.");
+      }
+
+      setStatus("success");
+      setMessage(
+        "Your request was received. We’ll review it and contact you shortly.",
+      );
+      form.reset();
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please call us directly.",
+      );
+    }
+  }
+
   return (
     <section id="contact" className="bg-white px-6 py-24 text-slate-900">
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
@@ -8,14 +64,31 @@ export default function ContactForm() {
           </p>
 
           <h2 className="mt-4 text-4xl font-black tracking-tight">
-            Tell us about the property.
+            Request boiler permit assistance.
           </h2>
 
           <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
-            Send the property address, number of boilers, and a brief
-            description of what you need. We’ll review the request and follow
-            up with the next step.
+            Have one boiler or an entire portfolio? Send us the property details
+            and we’ll review the request and contact you with the next step.
           </p>
+
+          <div className="mt-8 space-y-4">
+            {[
+              "Licensed C-4 Contractor",
+              "SF DBI Registered",
+              "Fast Response",
+            ].map((item) => (
+              <div
+                key={item}
+                className="flex items-center gap-3 text-slate-700"
+              >
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">
+                  ✓
+                </span>
+                <span className="font-semibold">{item}</span>
+              </div>
+            ))}
+          </div>
 
           <div className="mt-8 space-y-3 text-slate-700">
             <p>
@@ -28,15 +101,13 @@ export default function ContactForm() {
             <p>
               <strong>Service area:</strong> San Francisco
             </p>
-
-            <p>
-              <strong>Services:</strong> Permit applications, renewals,
-              inspections, corrections, and compliance support
-            </p>
           </div>
         </div>
 
-        <form className="rounded-2xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-2xl border border-slate-200 bg-slate-50 p-8 shadow-sm"
+        >
           <div className="grid gap-6 sm:grid-cols-2">
             <label className="block">
               <span className="text-sm font-semibold">Name</span>
@@ -115,15 +186,26 @@ export default function ContactForm() {
 
           <button
             type="submit"
-            className="mt-6 w-full rounded-md bg-emerald-600 px-6 py-5 font-bold text-white transition hover:bg-emerald-500"
+            disabled={status === "submitting"}
+            className="mt-8 w-full rounded-xl bg-emerald-600 px-8 py-5 text-lg font-bold text-white shadow-lg transition hover:bg-emerald-500 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Submit Permit Request
+            {status === "submitting"
+              ? "Sending Request..."
+              : "Submit Permit Request"}
           </button>
 
-          <p className="mt-4 text-sm text-slate-500">
-            The form is visual only for now. We’ll connect email delivery and
-            secure submission handling next.
-          </p>
+          {message && (
+            <p
+              role="status"
+              className={`mt-4 rounded-md px-4 py-3 text-sm font-semibold ${
+                status === "success"
+                  ? "bg-emerald-100 text-emerald-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {message}
+            </p>
+          )}
         </form>
       </div>
     </section>
