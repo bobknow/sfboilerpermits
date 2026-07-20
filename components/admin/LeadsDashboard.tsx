@@ -14,7 +14,7 @@ type LeadsDashboardProps = {
 export default function LeadsDashboard({ leads }: LeadsDashboardProps) {
   const [localLeads, setLocalLeads] = useState(leads);
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("New");
   const [updatingLeadId, setUpdatingLeadId] = useState<number | null>(null);
   const [confirmLead, setConfirmLead] = useState<Lead | null>(null);
   const [convertingLeadId, setConvertingLeadId] = useState<number | null>(null);
