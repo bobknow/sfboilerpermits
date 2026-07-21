@@ -32,7 +32,7 @@ export default async function AdminPage() {
     console.error("Admin leads error:", error);
 
     return (
-      <main className="px-6 py-12">
+      <main className="px-6 py-12 lg:px-10">
         <div className="mx-auto max-w-7xl">
           <h1 className="text-3xl font-black">Dashboard</h1>
 
@@ -62,6 +62,62 @@ export default async function AdminPage() {
             Fresh permit requests that need your attention.
           </p>
         </header>
+
+        <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <a
+            href="/admin/customers"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-emerald-500"
+          >
+            <p className="text-sm text-slate-400">Customers</p>
+
+            <h2 className="mt-2 text-2xl font-black">Manage Customers</h2>
+
+            <p className="mt-3 text-slate-400">
+              Contacts, organizations, and property owners.
+            </p>
+          </a>
+
+          <a
+            href="/admin/properties"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-emerald-500"
+          >
+            <p className="text-sm text-slate-400">Properties</p>
+
+            <h2 className="mt-2 text-2xl font-black">Buildings</h2>
+
+            <p className="mt-3 text-slate-400">
+              Equipment, permits, and monitoring.
+            </p>
+          </a>
+
+          <a
+            href="/admin/equipment"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-emerald-500"
+          >
+            <p className="text-sm text-slate-400">Equipment</p>
+
+            <h2 className="mt-2 text-2xl font-black">Boilers</h2>
+
+            <p className="mt-3 text-slate-400">
+              View every monitored asset.
+            </p>
+          </a>
+
+          <a
+            href="/admin/boilerwatch"
+            className="rounded-2xl border border-emerald-700 bg-emerald-950/30 p-6 transition hover:bg-emerald-950/50"
+          >
+            <p className="text-sm font-bold uppercase tracking-wide text-emerald-400">
+              BoilerWatch
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black">Live Monitoring</h2>
+
+            <p className="mt-3 text-slate-300">
+              Devices, telemetry, and alerts.
+            </p>
+          </a>
+        </section>
 
         <LeadsDashboard leads={leads} />
       </div>

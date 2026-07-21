@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { getCurrentTenant } from "@/lib/currentTenant";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -39,9 +40,12 @@ export async function POST(request: Request) {
         ? null
         : Number(boilers);
 
+    const tenant = await getCurrentTenant();
+
     const { error: databaseError } = await supabaseAdmin
       .from("leads")
       .insert({
+        tenant_id: tenant.id,
         name,
         phone,
         email,
