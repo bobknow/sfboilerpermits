@@ -2,6 +2,7 @@ import LeadsDashboard from "@/components/admin/LeadsDashboard";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import type { Lead } from "@/types/lead";
 import { notFound } from "next/navigation";
+import NewServiceRequestButton from "@/components/admin/NewServiceRequestButton";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +50,10 @@ export default async function AdminPage() {
   return (
     <main className="px-6 py-10 lg:px-10">
       <div className="mx-auto max-w-7xl">
-        <header className="border-b border-slate-800 pb-8">
+        <div>
+          <NewServiceRequestButton />
+        </div>
+        <header className="flex flex-col gap-6 border-b border-slate-800 pb-8 lg:flex-row lg:items-end lg:justify-between">
           <p className="text-sm font-bold uppercase tracking-[0.25em] text-emerald-400">
             Dashboard
           </p>
